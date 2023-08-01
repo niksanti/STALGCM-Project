@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import filedialog
 
 # Create root window
 window = Tk()
@@ -36,5 +37,28 @@ leftBodyInstr = Label(leftBodyFrame, text="1. Enter the number of states\n2. Ent
 leftBodyInstr.place(x=10, y=50)
 # align the text to the left
 leftBodyInstr.config(justify=LEFT)
+
+# Create label for the right body frame that maximizes the whole right body frame
+# This label contains the input fields for the user
+rightBodyLabel = Label(rightBodyFrame, text="Input Fields", font=("Arial", 20, "bold"), bg="Lightskyblue3")
+rightBodyLabel.place(x=100, y=10)
+
+# Create field to upload a text file as user input
+rightBodyInput = Label(rightBodyFrame, text="Upload a text file as input: ", font=("Arial", 10), bg="Lightskyblue3")
+rightBodyInput.place(x=10, y=50)
+
+# Create entry field for user to upload text file from local machine
+rightBodyInputField = Entry(rightBodyFrame, width=30, borderwidth=2)
+rightBodyInputField.place(x=200, y=50)
+
+# put an access to the file explorer
+def browseFiles():
+    filename = filedialog.askopenfilename(initialdir = "/", title = "Select a File", filetypes = (("Text files", "*.txt*"), ("all files", "*.*")))
+    rightBodyInputField.insert(END, filename.split("/")[-1])    # insert only the filename
+
+# Create a button to browse files from local machine
+browseButton = Button(rightBodyFrame, text="Browse Files", command=browseFiles)
+browseButton.place(x=200, y=80)
+
 
 window.mainloop()
