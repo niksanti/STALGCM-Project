@@ -2,87 +2,95 @@ import tkinter as tk
 
 window = tk.TK()
 
+window.title("Two-Way Accepter")
+
+
+
 class TwoWayAccepter:
-    def __init__(self, alphabet, transitions, start_state, accept_states):
+    def __init__(self, alphabet, transitions, start_state, accept_state, reject_state):
         self.alphabet = alphabet
         self.transitions = transitions
         self.start_state = start_state
-        self.accept_states = accept_states
+        self.accept_state = accept_state
+        self.reject_state = reject_state
 
-    def recognize(self, input_string):
+    def run(self, input_string):
+        tape = list(input_string)
+        head = 0
         current_state = self.start_state
-        index = 0
 
-        while index < len(input_string):
-            char = input_string[index]
-            if char not in self.alphabet:
-                return False
+        while current_state != self.accept_state and current_state != self.reject_state:
+            current_symbol = tape[head]
 
-            if (current_state, char) in self.transitions:
-                current_state, direction = self.transitions[(current_state, char)]
-                if direction == 'L':
-                    index -= 1
-                elif direction == 'R':
-                    index += 1
-            else:
-                return False
-
-        return current_state in self.accept_states
-
-    def generate(self, max_length):
-        current_state = self.start_state
-        output_string = ""
-
-        while len(output_string) < max_length:
-            possible_transitions = [
-                (char, state, direction)
-                for ((state, char), (next_state, direction)) in self.transitions.items()
-                if state == current_state
-            ]
-
-            if not possible_transitions:
+            if current_symbol not in self.input_alphabet:
+                current_state = self.reject_state
                 break
 
-            selected_transition = possible_transitions[0]
-            char, next_state, direction = selected_transition
-            output_string += char
+            if (current_state, current_symbol) not in self.transitions:
+                current_state = self.reject_state
+                break
 
-            if direction == 'L':
-                current_state = next_state
-            elif direction == 'R':
-                current_state = next_state
-                output_string = char + output_string
+            new_state, move_direction = self.transitions[(current_state, current_symbol)]
+            if move_direction == 'R':
+                head += 1
+            elif move_direction == 'L':
+                head = max(head - 1, 0)
 
-        return output_string
+            current_state = new_state
+
+        return current_state == self.accept_state
 
 # Example usage:
+f = open("test.txt", 'r')
+lines = []
+lines = f.readlines()
+f.close()
+
+total_lines = len(lines)
+
+if total_lines < 8:
+    print("invalid machine definition file")
+else:
+    number_of_states = int(lines[0])
+    states = lines[1].split()
+    number_of_inputs = int(lines[2])
+    inputs = lines[3].split()
+    number_of_transitions = int(lines[4])
+    transition = {}
+    for i in range(5, total_lines-3):
+        fields = lines.split(' ')
+        state = fields[0]
+        symbol = fields[1]
+        new_state = fields[2]
+        direction = fields[3]
+        move = set(state, symbol)
+        move2 = set(new_state, direction)
+        transition[move] = move2
+    start = lines[total_lines - 3]
+    accept = lines[total_lines - 2]
+    reject = lines[total_lines - 1]
+
 if __name__ == "__main__":
     # Define the alphabet
-    alphabet = {'0', '1'}
+    alphabet = set(inputs)
 
     # Define the transitions (current_state, input_symbol) -> (next_state, direction)
-    transitions = {
-        ('q0', '0'): ('q0', 'R'),
-        ('q0', '1'): ('q0', 'R'),
-        ('q0', ' '): ('q1', 'L'),
-        ('q1', '0'): ('q1', 'L'),
-        ('q1', '1'): ('q1', 'L'),
-        ('q1', ' '): ('q2', 'R'),
-    }
+    transitions = transition
 
     # Define the start state and accept states
-    start_state = 'q0'
-    accept_states = {'q2'}
+    start_state = start
+    accept_state = accept
+    reject_state = reject
 
     # Create the two-way accepter
-    accepter = TwoWayAccepter(alphabet, transitions, start_state, accept_states)
+    accepter = TwoWayAccepter(alphabet, transitions, start_state, accept_state, reject_state)
 
     # Test the recognition
     input_string = "1100"
-    if accepter.recognize(input_string):
-        print(f"{input_string} is in the language.")
+    if accepter.run(input_string):
+        print(f"{input_string} is accepted.")
     else:
-        print(f"{input_string} is not in the language.")
+        print(f"{input_string} is rejected.")
 
     # Test the generation
     generated_string = accepter.generate(max_length=10)

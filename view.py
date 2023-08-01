@@ -33,7 +33,7 @@ upperLabel.place(x=200, y=10)
 leftBodyLabel = Label(leftBodyFrame, text="Instructions", font=("Arial", 20, "bold"), bg="Lightskyblue3")
 leftBodyLabel.place(x=50, y=10)
 
-leftBodyInstr = Label(leftBodyFrame, text="1. Enter the number of states\n2. Enter the number of input symbols\n3. Enter the input symbols\n4. Enter the number of final states\n5. Enter the final states\n6. Enter the number of transitions\n7. Enter the transitions", font=("Arial", 10), bg="Lightskyblue3")
+leftBodyInstr = Label(leftBodyFrame, text="1. Enter the number of states\n2.Enter the state symbols\n3. Enter the number of input symbols\n4. Enter the input symbols\n4. Enter the number of transitions\n5. Enter the transitions\n6. Enter the start state\n7. Enter the accept state\n8. Enter the reject state", font=("Arial", 10), bg="Lightskyblue3")
 leftBodyInstr.place(x=10, y=50)
 # align the text to the left
 leftBodyInstr.config(justify=LEFT)
