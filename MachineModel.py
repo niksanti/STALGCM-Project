@@ -1,59 +1,56 @@
 # Model 
 
 class MachineModel:
-
     # Constructor
     def __init__(self):
-        pass
-
-    # Private Attributes
-    __states = None
-    __alphabet = None
-    __transitions = None
-    __initial_state = None
-    __final_states = None
-    __text_file_name = ""
-
-
+        self._states = []
+        self._alphabet = []
+        self._transitions = []
+        self._initial_state = ""
+        self._final_states = []
+        self._text_file_name = ""
+        self._path_file_directory = ""
     
     # Getters
-    def get_states():
-        return MachineModel.__states
+    def get_states(self):
+        return self._states
 
-    def get_alphabet():
-        return MachineModel.__alphabet
+    def get_alphabet(self):
+        return self._alphabet
     
-    def get_transitions():
-        return MachineModel.__transitions
+    def get_transitions(self):
+        return self._transitions
     
-    def get_initial_state():
-        return MachineModel.__initial_state
+    def get_initial_state(self):
+        return self._initial_state
     
-    def get_final_states():
-        return MachineModel.__final_states
+    def get_final_states(self):
+        return self._final_states
     
-    def get_text_file_name():
-        return MachineModel.__text_file_name
+    def get_text_file_name(self):
+        return self._text_file_name
+    
+    def get_path_file_directory(self):
+        return self._path_file_directory
     
     # Setters
     def set_states(self, states):
-        MachineModel.__states = states
+        self._states = states
 
     def set_alphabet(self, alphabet):
-        MachineModel.__alphabet = alphabet
+        self._alphabet = alphabet
 
     def set_transitions(self, transitions):
-        MachineModel.__transitions = transitions
+        self._transitions = transitions
 
     def set_initial_state(self, initial_state):
-        MachineModel.__initial_state = initial_state
+        self._initial_state = initial_state
 
     def set_final_states(self, final_states):
-        MachineModel.__final_states = final_states
+        self._final_states = final_states
 
     def set_text_file_name(self, text_file_name):
-        MachineModel.__text_file_name = text_file_name
+        self._text_file_name = text_file_name
 
-
-
-    # Methods
+    def set_path_file_directory(self, path_file_directory):
+        self._path_file_directory = path_file_directory
