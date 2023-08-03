@@ -1,36 +1,49 @@
 # Controller for the machine
 
-from tkinter import END, filedialog
+from MachineModel import MachineModel
+from MachineView import MachineView
 
 class MachineController:
-
     # Constructor
-    def __init__(self, view, model):
-        self.view = view
+    def __init__(self, model, view):
         self.model = model
+        self.view = view
 
-        # Set up the button
-        self.view.browseButton.config(command=self.browseFiles)
-        self.view.runButton.config(command=self.runMachine)
+    # Method for running the machine
+    def run_machine(self):
+        self.handle_file_upload(self.view.file_path.get())
 
-    # Browse files from local machine
-    def browseFiles(self):
-        self.view.filename = filedialog.askopenfilename(initialdir="/", title="Select a File", filetypes=(("Text files", "*.txt*"), ("all files", "*.*")))
-        # Get only the filename not the path
-        self.view.filename = self.view.filename.split("/")[-1]
-        self.model.set_text_file_name(self.view.filename)
-        self.view.rightBodyInputField.insert(END, self.view.filename)
-        
+    # Method for handling the file upload
+    def handle_file_upload(self, file_path):
+        self.model.set_path_file_directory(file_path)
+        self.model.set_text_file_name(file_path.split("/")[-1])
 
+        # Read the file
+        with open(file_path, "r") as file:
+            # Read the lines of the file
+            lines = file.readlines()
 
-    # Run the machine
-    def runMachine(self):
-        # read the contents of the text file
-        file = open(self.view.filename, "r")
-        contents = file.read()
-        file.close()
+            # Get the states
+            states = lines[0].strip().split(",")
+            self.model.set_states(states)
 
+            # Get the alphabet
+            alphabet = lines[1].strip().split(",")
+            self.model.set_alphabet(alphabet)
 
-    
+            # Get the transitions
+            transitions = []
+            for i in range(2, len(lines) - 2):
+                transitions.append(lines[i].strip().split(","))
+            self.model.set_transitions(transitions)
 
-    
+            # Get the initial state
+            initial_state = lines[-2].strip()
+            self.model.set_initial_state(initial_state)
+
+            # Get the final states
+            final_states = lines[-1].strip().split(",")
+            self.model.set_final_states(final_states)
+
+            # Display the contents of the file
+            self.view.display_contents(self.model)
