@@ -5,11 +5,12 @@ from MachineController import MachineController
 from MachineView import MachineView 
 
 def TwoWayFAMain():
-    model = MachineModel()                          # Create an object of the model class
-    controller = MachineController(model, None)     # Create an object of the controller class
-    view = MachineView(controller)                  # Create an object of the view class
-    controller.view = view                          # Set the view of the controller
-    view.create_window()                            # Create the window
+    model = MachineModel()
+    view = MachineView()
+    controller = MachineController(model, view)
+    
+    view.create_window(controller=controller)  
+
 
 if __name__ == "__main__":
     TwoWayFAMain()
