@@ -22,9 +22,6 @@ class MachineView:
         self.middle_frame = Frame(self.window, width=700, height=500, bg="SLATEGRAY2")
         self.middle_frame.grid(row=1, column=0, padx=10, pady=5)
 
-        # self.bottom_frame = Frame(self.window, width=700, height=50, bg="SLATEGRAY2")
-        # self.bottom_frame.grid(row=2, column=0, padx=10, pady=5)
-
         # Create the frames within the middle frame
         self.left_frame = Frame(self.middle_frame, width=260, height=400, bg="LIGHTSKYBLUE3")
         self.left_frame.grid(row=0, column=0, padx=10, pady=5)
@@ -131,6 +128,12 @@ class MachineView:
         self.right_output_text.insert(END, "Initial State: " + str(model.get_initial_state()) + "\n")
         self.right_output_text.insert(END, "Accept State: " + str(model.get_final_state_accept()) + "\n")
         self.right_output_text.insert(END, "Reject State: " + str(model.get_final_state_reject()) + "\n")
+
+        # Step tracing of the machine per input
+        self.right_output_text.insert(END, "\nSteps Tracing: " + "\n")
+        self.right_output_text.insert(END, "STEP" + "\t" + "CURRENT SYMBOL" + "\t\t" + "TRANSITION" + "\n")
+        for input in range (len(model.get_current_input_list())):
+            self.right_output_text.insert(END, str(input + 1) + ": " + "\t" + str(model.get_current_input_list()[input]) + "\t\t" + str(model.get_transition_info_list()[input]))
 
     # Method for displaying the status of the machine
     def display_status(self, model):
